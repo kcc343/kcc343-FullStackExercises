@@ -1,0 +1,13 @@
+browser->server: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note
+note over browser:
+text inputted by user
+and the time stamp sent as
+JSON-string and rerenders
+list on page with new text data
+end note
+note over server:
+server parses data received which is
+JSON-data indicated by request
+header
+end note
+server-->browser: status code 201
