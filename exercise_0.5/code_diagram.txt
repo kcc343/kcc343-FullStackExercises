@@ -6,15 +6,13 @@ browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/spa.js
 server-->browser: spa.js
 
 note over browser:
-browser starts executing js-code
-that requests JSON data from server 
+browser starts executing
+Javascript code that requests
+JSON data from server 
 end note
 
-browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/data.json
-server-->browser: [{ content: "HTML is easy", date: "2019-05-23" }, ...]
-
 note over browser:
-browser uses DOM API to add HTML
-elements to display the notes from
-data.json
+browser uses Javascript code to
+display notes by manipulating
+the DOM API
 end note
