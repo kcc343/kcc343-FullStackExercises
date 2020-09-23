@@ -1,7 +1,5 @@
 import React, {useState} from 'react'
 
-
-
 const App = () => {
   const [persons, setPersons] = useState([
     {name: 'Arto Hellas'}
@@ -10,11 +8,17 @@ const App = () => {
 
   const addName = (event) => {
     event.preventDefault()
-    const nameObject = {
-      name: newName
+    let namePos = persons.indexOf(newName)
+    console.log(namePos)
+    if (namePos === -1) {
+      const nameObject = {
+        name: newName
+      }
+      setPersons(persons.concat(nameObject))
+      setNewName('')
+    } else {
+      alert(`${newName} is already added to phonebook`)
     }
-    setPersons(persons.concat(nameObject))
-    setNewName('')
   }
 
   const handlePersonChange = (event) => {
@@ -28,7 +32,6 @@ const App = () => {
       <form onSubmit={addName}>
         <div>
           name: <input 
-            value={newName}
             onChange={handlePersonChange}
           />
           
@@ -40,8 +43,8 @@ const App = () => {
       </form>
       <h2>Numbers</h2>
       {persons.map(person => 
-          <p>{person.name}</p>
-        )}
+          <p key={person.name}>{person.name}</p>
+      )}
     </div>
   )
 }
