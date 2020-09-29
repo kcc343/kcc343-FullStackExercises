@@ -43,7 +43,9 @@ const App = () => {
   const handleFilterChange = (event) => {
     setShow(event.target.value)
   }
-  let filterPersons = persons.filter(person => person.name.toLowerCase().startsWith(show))
+  
+  let filterPersons = persons.filter(person => person.name.toLowerCase().startsWith(show.toLowerCase()))
+
   return (
     <div className="App">
       <h2>Phonebook</h2>
