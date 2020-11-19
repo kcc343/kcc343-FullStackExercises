@@ -11,9 +11,8 @@ const App = (data) => {
   const [show, setShow] = useState('')
 
   useEffect(() => {
-    console.log('effect')
     axios
-      .get('http://localhost:3001/Persons')
+      .get('http://localhost:3001/persons')
       .then(response => {
         setPersons(response.data)
       })
