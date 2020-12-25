@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Search = ({filter, handle}) => {
+const Search = ({handle}) => {
   return (
     <div>
       <input onChange={handle} />

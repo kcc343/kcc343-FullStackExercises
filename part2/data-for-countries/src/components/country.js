@@ -1,8 +1,19 @@
 import React from 'react';
 
-const Country = ({list, handleCountry}) => {
-  
-if (list.length === 1) {
+const Country = ({list, handleCountry, weatherData}) => {
+  let temperature;
+  let url;
+  let windSpeed;
+  let windDirection;
+  console.log(weatherData);
+  if (weatherData.length !== 0 && weatherData.data.current !== undefined) {
+    temperature = weatherData.data.current.temperature;
+    url = weatherData.data.current["weather_icons"][0];
+    windSpeed = weatherData.data.current["wind_speed"];
+    windDirection = weatherData.data.current["wind_dir"];
+  }
+  if (list.length === 1) {
+    handleCountry(list[0].name);
     return(
       <>
         <h2>{list[0].name}</h2>
@@ -13,7 +24,14 @@ if (list.length === 1) {
           <li key={language.name}>{language.name}</li>
         )}
         <h3>Flag</h3>
-        <img alt="`{$list[0].name}` flag" src={list[0].flag}></img>
+        <img alt={list[0].name} src={list[0].flag}></img>
+        <h3>Weather in {list[0].capital}</h3>
+        <b>temperature:</b><p>{temperature} celsius</p> 
+        <img alt={list[0].capital} src={url}></img>
+        <div>
+          <b>wind: </b>
+          <p>{windSpeed} mph direction {windDirection}</p>
+        </div>
       </>
     )
   }
