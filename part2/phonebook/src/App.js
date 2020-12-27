@@ -24,11 +24,17 @@ const App = (data) => {
     if (filterFind.length === 0) {
       const nameObject = {
         name: newName,
-        number: newNum
+        number: newNum,
+        id: persons.length + 1
       }
-      setPersons(persons.concat(nameObject))
-      setNewName('')
-      setNewNum('')
+
+      axios
+      .post('http://localhost:3001/persons', nameObject)
+      .then(response => {
+        setPersons(persons.concat(response.data))
+        setNewName('')
+        setNewNum('')
+      })
     } else {
       alert(`${newName} is already added to phonebook`)
     }
