@@ -20,7 +20,8 @@ const App = (data) => {
 
   const addData = (event) => {
     event.preventDefault()
-    let filterFind = persons.filter(person => person.name.toLowerCase().startsWith(newName))
+    let filterFind = persons.filter(person => person.name.toLowerCase().startsWith(newName.toLowerCase()))
+    console.log(filterFind.length)
     if (filterFind.length === 0) {
       const nameObject = {
         name: newName,
@@ -35,8 +36,16 @@ const App = (data) => {
         setNewName('')
         setNewNum('')
       })
-    } else {
-      alert(`${newName} is already added to phonebook`)
+    } else if (window.confirm(`${newName} is already added to phonebook, replace old number with new one?`)) {
+      const name = filterFind[0].name;
+      const number = newNum;
+      const id = filterFind[0].id;
+      const nameObject = { name, number, id }
+      numberService
+      .update(nameObject.id, nameObject)
+      .then(updatePerson => {
+        setPersons(persons.map(person => person.id !== nameObject.id ? person : updatePerson))
+      })
     }
   }
 

@@ -21,4 +21,5 @@ const deleteNumber = (id) => {
   return request.then(response => response.data)
 }
 
-export default { getAll, create, update, deleteNumber }
+const numberService = { getAll, create, update, deleteNumber }
+export default numberService
