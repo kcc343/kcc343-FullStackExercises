@@ -11,6 +11,7 @@ const App = (data) => {
   const [newNum, setNewNum] = useState('')
   const [show, setShow] = useState('')
   const [message, setMessage] = useState(null)
+  const [type, setType] = useState('')
 
   useEffect(() => {
       numberService
@@ -38,6 +39,7 @@ const App = (data) => {
         setNewName('')
         setNewNum('')
         setMessage(`Added ${newName}`)
+        setType('success')
         setTimeout(() => {
           setMessage(null)
         }, 5000)
@@ -52,9 +54,18 @@ const App = (data) => {
       .then(updatePerson => {
         setPersons(persons.map(person => person.id !== nameObject.id ? person : updatePerson))
         setMessage(`Updated ${nameObject.name} phone`)
+        setType('success')
         setTimeout(() => {
           setMessage(null)
         }, 5000)
+      })
+      .catch(error => {
+        setType('error')
+        setMessage(`Information of ${name} has already been removed from server`)
+        setTimeout(() => {
+          setMessage(null)
+        }, 5000)
+        setPersons(persons.filter(person => person.id !== id))
       })
     }
   }
@@ -64,6 +75,14 @@ const App = (data) => {
       numberService
       .deleteNumber(id)
       .then(deletePerson => {
+        setPersons(persons.filter(person => person.id !== id))
+      })
+      .catch(error => {
+        setType('error')
+        setMessage(`Information of ${name} has already been removed from server`)
+        setTimeout(() => {
+          setMessage(null)
+        }, 5000)
         setPersons(persons.filter(person => person.id !== id))
       })
     }
@@ -86,7 +105,7 @@ const App = (data) => {
   return (
     <div className="App">
       <h2>Phonebook</h2>
-      <Notification message={message} />
+      <Notification message={message} type={type}/>
       <Filter handle={handleFilterChange}></Filter>
       <h2>add a new</h2>
       <PersonForm 
