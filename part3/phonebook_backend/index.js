@@ -26,13 +26,13 @@ let persons = [
 
 app.get('/api/persons', (request, response) => {
   response.json(persons)
-})
+});
 
 app.get('/info', (request, response) => {
   response.writeHead(200, { 'Content-Type': 'text/plain' })
   let date = new Date()
   response.end(`Phonebook has info for ${persons.length} people \n${date}`)
-})
+});
 
 app.get('/api/persons/:id', (request, response) => {
     const id = Number(request.params.id)
@@ -42,7 +42,13 @@ app.get('/api/persons/:id', (request, response) => {
     } else {
         response.status(404).end()
     }
-})
+});
+
+app.delete('/api/persons/:id', (request, response) => {
+    const id = Number(request.params.id)
+    persons = persons.filter(phoneNum => phoneNum.id !== id)
+    response.status(204).end()
+});
 
 const PORT = 3001
 app.listen(PORT, () => {
