@@ -53,22 +53,17 @@ app.post('/api/persons', (request, response) => {
       error: 'number missing' 
     })
   }
-  let check = persons.filter(checkPerson => checkPerson.name === body.name)
-  if (check.length !== 0) {
-    return response.status(400).json({ 
-      error: 'name must be unique' 
-    })
-  }
 
   let id = Math.floor(Math.random() * (100 - 1) + 1);
-  const person = { 
+  const person = new Person({ 
     name: body.name,
     phone: body.number,
     id: id
-  }
+  })
 
-  persons.concat(person)
-  response.json(person)
+  person.save().then(savedPerson => {
+    response.json(savedPerson)
+  })
 });
 
 const PORT = process.env.PORT
