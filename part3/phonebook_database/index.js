@@ -37,9 +37,11 @@ app.get('/api/persons/:id', (request, response) => {
 });
 
 app.delete('/api/persons/:id', (request, response) => {
-  const id = Number(request.params.id)
-  persons.filter(phoneNum => phoneNum.id !== id)
-  response.status(204).end()
+  Person.findByIdAndRemove(request.params.id)
+  .then(result => {
+    response.status(204).end()
+  })
+  .catch(error => console.log(error))
 });
 
 app.post('/api/persons', (request, response) => {
@@ -54,11 +56,9 @@ app.post('/api/persons', (request, response) => {
     })
   }
 
-  let id = Math.floor(Math.random() * (100 - 1) + 1);
   const person = new Person({ 
     name: body.name,
     phone: body.number,
-    id: id
   })
 
   person.save().then(savedPerson => {
