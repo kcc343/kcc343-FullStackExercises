@@ -15,5 +15,14 @@ content-type: application/json
 
 {
     "name": "Arto Hellas",
-    "number": "85-82344"
+    "phone": "85-82344"
+}
+
+###
+PUT http://localhost:3001/api/persons/6010730fd82e1923509110f3
+content-type: application/json
+
+{
+    "name": "Anna",
+    "phone": "85-82344"
 }

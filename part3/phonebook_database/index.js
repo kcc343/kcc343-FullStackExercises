@@ -12,7 +12,7 @@ morgan.token('data', function(req, res) {
   return JSON.stringify(req.body);
 });
 
-const Person = require('./models/person')
+const Person = require('./models/person');
 
 app.get('/api/persons', (request, response) => {
   Person.find({}).then(persons => {
@@ -60,12 +60,26 @@ app.post('/api/persons', (request, response) => {
 
   const person = new Person({ 
     name: body.name,
-    phone: body.number,
+    phone: body.phone,
   })
 
   person.save().then(savedPerson => {
     response.json(savedPerson)
   })
+});
+
+app.put('/api/persons/:id', (request, response, next) => {
+  const body = request.body
+  const person = { 
+    name: body.name,
+    phone: body.phone,
+  }
+
+  Person.findByIdAndUpdate(request.params.id, person, { returnOriginal: false } )
+    .then(updatedPerson => {
+      response.json(updatedPerson)
+    })
+    .catch(error => next(error))
 });
 
 const errorHandler = (error, request, response, next) => {
