@@ -12,6 +12,8 @@ const App = (data) => {
   const [show, setShow] = useState('')
   const [message, setMessage] = useState(null)
   const [type, setType] = useState('')
+  console.log(persons)
+  let filterPersons = persons.filter(person => person.name.toLowerCase().startsWith(show.toLowerCase()))
 
   useEffect(() => {
       numberService
@@ -24,12 +26,11 @@ const App = (data) => {
   const addData = (event) => {
     event.preventDefault()
     let filterFind = persons.filter(person => person.name.toLowerCase().startsWith(newName.toLowerCase()))
-    console.log(filterFind.length)
+    console.log(filterFind[0].id)
     if (filterFind.length === 0) {
       const nameObject = {
         name: newName,
-        number: newNum,
-        id: persons.length + 1
+        phone: newNum,
       }
 
       numberService
@@ -46,9 +47,9 @@ const App = (data) => {
       })
     } else if (window.confirm(`${newName} is already added to phonebook, replace old number with new one?`)) {
       const name = filterFind[0].name;
-      const number = newNum;
+      const phone = newNum;
       const id = filterFind[0].id;
-      const nameObject = { name, number, id }
+      const nameObject = { name, phone, id }
       numberService
       .update(nameObject.id, nameObject)
       .then(updatePerson => {
@@ -100,8 +101,6 @@ const App = (data) => {
     setShow(event.target.value)
   }
   
-  let filterPersons = persons.filter(person => person.name.toLowerCase().startsWith(show.toLowerCase()))
-
   return (
     <div className="App">
       <h2>Phonebook</h2>
