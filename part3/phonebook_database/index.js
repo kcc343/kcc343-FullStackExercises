@@ -21,9 +21,11 @@ app.get('/api/persons', (request, response) => {
 });
 
 app.get('/info', (request, response) => {
-  response.writeHead(200, { 'Content-Type': 'text/plain' })
   let date = new Date()
-  response.end(`Phonebook has info for ${persons.length} people \n${date}`)
+  response.writeHead(200, { 'Content-Type': 'text/plain' })
+  Person.find({}).then(persons => {
+    response.end(`Phonebook has info for ${persons.length} people \n${date}`)
+  })
 });
 
 app.get('/api/persons/:id', (request, response, next) => {
