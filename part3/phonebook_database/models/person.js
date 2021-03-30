@@ -13,8 +13,17 @@ mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true, useFind
     })
 
 const personSchema = new mongoose.Schema({
-  name: { type: String, required: true, unique: true},
-  phone: { type: String, required: true}
+  name: { 
+    type: String,
+    minlength: 3, 
+    required: true, 
+    unique: true
+  },
+  phone: { 
+    type: String, 
+    required: true,
+    match: [/^(\d+(-)?){8,}$/]
+  }
 })
 
 personSchema.plugin(uniqueValidator);
