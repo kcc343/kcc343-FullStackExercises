@@ -12,7 +12,6 @@ const App = (data) => {
   const [show, setShow] = useState('')
   const [message, setMessage] = useState(null)
   const [type, setType] = useState('')
-  console.log(persons)
   let filterPersons = persons.filter(person => person.name.toLowerCase().startsWith(show.toLowerCase()))
 
   useEffect(() => {
@@ -25,8 +24,8 @@ const App = (data) => {
 
   const addData = (event) => {
     event.preventDefault()
-    let filterFind = persons.filter(person => person.name.toLowerCase().startsWith(newName.toLowerCase()))
-    console.log(filterFind[0].id)
+    console.log(persons)
+    let filterFind = persons.filter(person => person.name.toLowerCase() === newName.toLowerCase())
     if (filterFind.length === 0) {
       const nameObject = {
         name: newName,
@@ -37,21 +36,26 @@ const App = (data) => {
       .create(nameObject)
       .then(returnPerson => {
         setPersons(persons.concat(returnPerson))
-        setNewName('')
-        setNewNum('')
         setMessage(`Added ${newName}`)
         setType('success')
         setTimeout(() => {
           setMessage(null)
         }, 5000)
       })
+      .catch(error => {
+        setType('error')
+        setMessage(`${error.response.data.error}`)
+        setTimeout(() => {
+          setMessage(null)
+        }, 5000)
+      })
     } else if (window.confirm(`${newName} is already added to phonebook, replace old number with new one?`)) {
-      const name = filterFind[0].name;
+      const name = newName;
       const phone = newNum;
       const id = filterFind[0].id;
       const nameObject = { name, phone, id }
       numberService
-      .update(nameObject.id, nameObject)
+      .update(id, nameObject)
       .then(updatePerson => {
         setPersons(persons.map(person => person.id !== nameObject.id ? person : updatePerson))
         setMessage(`Updated ${nameObject.name} phone`)
@@ -62,11 +66,11 @@ const App = (data) => {
       })
       .catch(error => {
         setType('error')
-        setMessage(`Information of ${name} has already been removed from server`)
+        console.log(error.response)
+        setMessage(`${error.response.data.error}`)
         setTimeout(() => {
           setMessage(null)
         }, 5000)
-        setPersons(persons.filter(person => person.id !== id))
       })
     }
   }
