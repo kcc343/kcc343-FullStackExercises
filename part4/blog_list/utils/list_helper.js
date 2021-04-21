@@ -11,7 +11,7 @@ const totalLikes = (blogs) => {
 }
 
 const favoriteBlog = (blogs) => {
-	if (blogs.length == 0) {
+	if (blogs.length === 0) {
 		return {}
 	}
 	let mostLiked = blogs[0]
@@ -24,8 +24,32 @@ const favoriteBlog = (blogs) => {
 	return mostLiked
 }
 
+const mostBlogs = (blogs) => {
+	let maxKey = "key"
+	let maxValue = -1
+	if (blogs.length === 0) {
+		return { 'author' : "None", 'blogs' : -1 }
+	}
+	const totalBlog = blogs.reduce((result, {author}) => {
+		if (result[author]) {
+			result[author]++
+		} else {
+			result[author] = 1
+		}
+		return result
+	}, {})
+	for (const blog of Object.keys(totalBlog)) {
+		if (totalBlog[blog] > maxValue) {
+			maxKey = blog
+			maxValue = totalBlog[blog]
+		}
+	}
+	return { 'author': maxKey, 'blogs': maxValue }
+}
+
 module.exports = {
 	dummy,
 	totalLikes,
-	favoriteBlog
+	favoriteBlog,
+	mostBlogs
 }
