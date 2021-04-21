@@ -47,9 +47,33 @@ const mostBlogs = (blogs) => {
 	return { 'author': maxKey, 'blogs': maxValue }
 }
 
+const mostLikes = (blogs) => {
+	let maxKey = "key"
+	let maxValue = -1
+	if (blogs.length === 0) {
+		return { 'author' : "None", 'likes' : -1 }
+	}
+	const totalBlogLikes = blogs.reduce((result, {author, likes}) => {
+		if (result[author]) {
+			result[author] += likes
+		} else {
+			result[author] = likes
+		}
+		return result
+	}, {})
+	for (const blog of Object.keys(totalBlogLikes)) {
+		if (totalBlogLikes[blog] > maxValue) {
+			maxKey = blog
+			maxValue = totalBlogLikes[blog]
+		}
+	}
+	return { 'author': maxKey, 'likes': maxValue }
+}
+
 module.exports = {
 	dummy,
 	totalLikes,
 	favoriteBlog,
-	mostBlogs
+	mostBlogs,
+	mostLikes
 }
