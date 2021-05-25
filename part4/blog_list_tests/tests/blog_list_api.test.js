@@ -1,8 +1,19 @@
 const mongoose = require('mongoose')
 const supertest = require('supertest')
 const app = require('../app')
+const helper = require('../utils/blog_helper')
 
 const api = supertest(app)
+
+const Blog = require('../models/blog')
+beforeEach(async () => {
+  await Blog.deleteMany({})
+
+  for (let blog of helper.initialBlog) {
+    let blogObj = new Blog(blog)
+    await blogObj.save()
+  }
+})
 
 test('blogs are returned as json', async () => {
   await api
@@ -12,8 +23,7 @@ test('blogs are returned as json', async () => {
 })
 
 test('blogs have id property', async () => {
-  const response = await api.get('/api/blogs')
-  const blogs = response.body
+  const blogs = await helper.blogsInDb()
   for (let blog of blogs) {
     expect(blog.id).toBeDefined()
   }
@@ -26,17 +36,14 @@ test('blogs can receive POST request', async () => {
     url: "https://myanimelist.net/anime/31646/3-gatsu_no_Lion",
     likes: 40
   }
-  const response = await api.get('/api/blogs')
-  const initialLength = response.body.length
 
   await api
     .post('/api/blogs')
     .send(newBlog)
     .expect(201)
 
-  const responseAfter = await api.get('/api/blogs')
-  const newLength = responseAfter.body.length
-  expect(newLength).toBe(initialLength + 1)
+  const responseAfter = await helper.blogsInDb()
+  expect(responseAfter).toHaveLength(helper.initialBlog.length + 1)
 })
 
 afterAll(() => {
