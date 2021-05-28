@@ -28,6 +28,7 @@ test('blogs have id property', async () => {
     expect(blog.id).toBeDefined()
   }
 })
+
 describe('blogs POST request tests', () => {
   test('blogs can receive POST request', async () => {
     const newBlog = {
@@ -63,6 +64,47 @@ describe('blogs POST request tests', () => {
     const findBlog = await helper.specificBlog(newBlog._id)
     expect(findBlog.likes).toBe(0)
   })
+
+  test('blog with no title property returns 400 status code', async () => {
+    const newBlog = {
+      _id: "5a422a851b54a676234d17f4",
+      author: "Chika Umino",
+      url: "https://myanimelist.net/anime/31646/3-gatsu_no_Lion",
+      likes: 40
+    }
+  
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(400)
+  })
+
+  test('blog with no url property returns 400 status code', async () => {
+    const newBlog = {
+      _id: "5a422a851b54a676234d17f4",
+      title: "March comes in Like a Lion",
+      author: "Chika Umino",
+      likes: 40
+    }
+  
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(400)
+  })
+
+  test('blog with no title and url property returns 400 status code', async () => {
+    const newBlog = {
+      _id: "5a422a851b54a676234d17f4",
+      author: "Chika Umino",
+      likes: 40
+    }
+  
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(400)
+  })  
 })
 
 afterAll(() => {
