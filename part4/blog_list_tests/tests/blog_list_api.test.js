@@ -29,7 +29,7 @@ test('blogs have id property', async () => {
   }
 })
 
-describe('blogs POST request tests', () => {
+describe('adding a blog', () => {
   test('blogs can receive POST request', async () => {
     const newBlog = {
       _id: "5a422a851b54a676234d17f4",
@@ -105,6 +105,23 @@ describe('blogs POST request tests', () => {
       .send(newBlog)
       .expect(400)
   })  
+})
+
+describe('deleting a blog post', () => {
+  test('successful with status code 204 if id is valid', async () => {
+    const blogStart = await helper.blogsInDb()
+    const blogDelete = blogStart[0] 
+
+    await api
+      .delete(`/api/blogs/${blogDelete.id}`)
+      .expect(204)
+    
+    const blogEnd = await helper.blogsInDb()
+
+    expect(blogEnd).toHaveLength(helper.initialBlog.length - 1)
+    const contentOfBlogs = blogEnd.map(blog => blog.id)
+    expect(contentOfBlogs).not.toContain(blogDelete.id)
+  })
 })
 
 afterAll(() => {
