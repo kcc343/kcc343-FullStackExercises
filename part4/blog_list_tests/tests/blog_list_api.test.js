@@ -124,6 +124,24 @@ describe('deleting a blog post', () => {
   })
 })
 
+describe('updating a blog post', () => {
+  test('updates blog likes', async () => {
+    const blogStart = await helper.blogsInDb()
+    const blogUpdate = blogStart[0] 
+    const blog = {
+      likes: 0
+    }
+
+    const updateBlog = await api.put(`/api/blogs/${blogUpdate.id}`).send(blog)
+    
+    const blogEnd = await helper.blogsInDb()
+
+    expect(blogEnd).toHaveLength(helper.initialBlog.length)
+    const contentOfBlog = blogEnd.map(singleBlog => singleBlog.id == updateBlog.id)
+    expect(contentOfBlog.likes).toBe(updateBlog.likes)
+  })
+})
+
 afterAll(() => {
   mongoose.connection.close()
 })
