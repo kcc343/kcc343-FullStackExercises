@@ -5,9 +5,9 @@ require('express-async-errors')
 
 usersRouter.post('/', async (request, response) => {
   const body = request.body
-  
-  const findUser = await User.find({ username: body.username })
-  if (findUser.length === 0) {
+  if (!body.password || body.password.length < 3) {
+    response.status(400).json({ error: '`password` needs to be at least 3 characters'})
+  } else {
     const saltRounds = 10
     const passwordHash = await bcrypt.hash(body.password, saltRounds)
   
@@ -18,11 +18,7 @@ usersRouter.post('/', async (request, response) => {
     })
   
     const savedUser = await user.save()
-  
     response.json(savedUser)
-  } else {
-    response.status(400)
-    response.json({ error: '`username` to be unique' })
   }
 })
 
